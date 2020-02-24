@@ -3,13 +3,14 @@ package edu.temple.colorpicker;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
-public class ColorActivity extends AppCompatActivity {
+public class PaletteActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,7 +18,6 @@ public class ColorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         final ConstraintLayout constraintLayout = findViewById(R.id.constraintLayout);
-
         Spinner spinner = findViewById(R.id.spinner);
         final String[] colorList = {"white", "red", "blue", "green", "magenta", "aqua", "fuchsia", "lime", "purple", "teal"};
         final ColorAdapter colorAdapter = new ColorAdapter(this, colorList);
@@ -26,13 +26,16 @@ public class ColorActivity extends AppCompatActivity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                constraintLayout.setBackgroundColor(Color.parseColor(colorList[position]));
-                colorAdapter.selectedPos = position;
+                if(position != 0) {
+                    Intent newIntent = new Intent(PaletteActivity.this, CanvasActivity.class);
+                    newIntent.putExtra("Color", colorList[position]);
+                    startActivity(newIntent);
+                }
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                constraintLayout.setBackgroundColor(Color.WHITE);
+            public void onNothingSelected(AdapterView<?> adapter) {
+                //constraintLayout.setBackgroundColor(Color.WHITE);
             }
         });
     }
